@@ -30,7 +30,7 @@ export default function Home() {
               特别说明
             </Link>
             <Link
-              href="https://github.com/thenecromance/mythic-stone-web"
+              href="https://github.com/thenecromance/mythic-stone"
               target="_blank"
               rel="noopener noreferrer"
               className="ml-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold shadow hover:from-cyan-400 hover:to-violet-400 transition-all"
@@ -195,7 +195,7 @@ export default function Home() {
                 size="lg"
                 className="border-cyan-400 text-cyan-300 font-bold px-8 py-4 rounded-xl hover:bg-cyan-900/20 transition-all"
               >
-                <Link href="https://github.com/thenecromance/mythic-stone-web" target="_blank" rel="noopener noreferrer">
+                <Link href="https://github.com/thenecromance/mythic-stone" target="_blank" rel="noopener noreferrer">
                   GitHub
                 </Link>
               </Button>
@@ -369,7 +369,7 @@ export default function Home() {
                 </li>
               </ul>
               <Link
-                href="https://github.com/thenecromance/mythic-stone-web"
+                href="https://github.com/thenecromance/mythic-stone"
                 className="mt-4 inline-flex items-center space-x-2 text-cyan-400 hover:text-cyan-300 transition-colors font-medium"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -391,7 +391,7 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-4">
             <Link
-              href="https://github.com/thenecromance/mythic-stone-web"
+              href="https://github.com/thenecromance/mythic-stone"
               className="flex items-center gap-1 text-gray-400 hover:text-cyan-400 transition-colors"
               target="_blank"
               rel="noopener noreferrer"
