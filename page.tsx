@@ -8,10 +8,18 @@ import { Button } from "@/components/ui/button"
 export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white">
+
       {/* Navigation */}
       <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-black/60 shadow-lg backdrop-blur-2xl transition-all">
         <div className="container flex h-16 items-center justify-between px-4">
+
           <Link className="flex items-center space-x-2 font-bold group" href="/">
+            <img
+              src="/logo.png"
+              alt="MythicStone Logo"
+              className="h-8 w-8 drop-shadow-lg"
+              style={{ filter: "drop-shadow(0 2px 8px #22d3ee88)" }}
+            />
             <span className="text-2xl font-extrabold bg-gradient-to-r from-cyan-400 via-violet-400 to-white bg-clip-text text-transparent group-hover:from-cyan-300 group-hover:to-violet-300 transition-all">
               MythicStone
             </span>
@@ -49,7 +57,7 @@ export default function Home() {
         {/* Animated Elements */}
         <div className="absolute inset-0 overflow-hidden">
           {/* Curved Lines */}
-          <svg className="absolute h-full w-full" xmlns="http://www.w3.org/2000/svg">
+          <svg className="absolute h-full w-full" xmlns="https://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="grad1" x1="1" y1="0" x2="0" y2="0">
                 <stop offset="0%" stopColor="#22d3ee" stopOpacity="0" />
