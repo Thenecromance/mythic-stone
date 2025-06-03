@@ -405,12 +405,23 @@ export default function Home() {
             {/* 可添加更多社交链接 */}
           </div>
         </div>
+
         <div className="mt-6 border-t border-white/10 pt-6 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} MythicStonePlus. Made by <Link 
-          href="https://github.com/thenecromance"
-          className="text-cyan-400">Thenecromance</Link>.
+          © {new Date().getFullYear()} MythicStonePlus. Made by <Link
+            href="https://github.com/thenecromance"
+            className="text-cyan-400">Thenecromance</Link>.
           <span className="mx-2 text-gray-700">|</span>
           <span>数据来源：网易暴雪API</span>
+          <div className="mt-2 text-center text-xs text-gray-500">
+            <a
+              href="https://beian.miit.gov.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-cyan-400 transition-colors"
+            >
+              {process.env.NEXT_PUBLIC_BEIAN_NUMBER}
+            </a>
+          </div>
         </div>
       </footer>
     </div>
