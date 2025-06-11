@@ -4,53 +4,14 @@ import { motion } from "framer-motion"
 import { ArrowRight, CheckCircle2, CreditCard, LineChart, Lock, Wallet } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import Header from "./components/header"
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white">
 
       {/* Navigation */}
-      <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-black/60 shadow-lg backdrop-blur-2xl transition-all">
-        <div className="container flex h-16 items-center justify-between px-4">
-
-          <Link className="flex items-center space-x-2 font-bold group" href="/">
-            <img
-              src="/logo.png"
-              alt="MythicStone Logo"
-              className="h-8 w-8 drop-shadow-lg"
-              style={{ filter: "drop-shadow(0 2px 8px #22d3ee88)" }}
-            />
-            <span className="text-2xl font-extrabold bg-gradient-to-r from-cyan-400 via-violet-400 to-white bg-clip-text text-transparent group-hover:from-cyan-300 group-hover:to-violet-300 transition-all">
-              MythicStone
-            </span>
-          </Link>
-          <nav className="hidden md:flex items-center space-x-2">
-            <Link
-              href="#features"
-              className="px-4 py-2 rounded-lg text-gray-300 hover:text-cyan-400 hover:bg-cyan-900/20 transition-all font-medium"
-            >
-              能做什么
-            </Link>
-            <Link
-              href="#introduce"
-              className="px-4 py-2 rounded-lg text-gray-300 hover:text-violet-400 hover:bg-violet-900/20 transition-all font-medium"
-            >
-              特别说明
-            </Link>
-            <Link
-              href="https://github.com/thenecromance/mythic-stone"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ml-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold shadow hover:from-cyan-400 hover:to-violet-400 transition-all"
-            >
-              GitHub
-            </Link>
-          </nav>
-          <div className="md:hidden flex items-center">
-            {/* 可添加移动端菜单按钮 */}
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="relative flex min-h-screen items-center justify-center overflow-hidden pt-16">
@@ -193,8 +154,8 @@ export default function Home() {
                 size="lg"
                 className="bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:from-cyan-400 hover:to-violet-400 transition-all"
               >
-                <Link href="#features">
-                  Comming Soon
+                <Link href="/search">
+                  开始搜索！
                 </Link>
               </Button>
               <Button
@@ -390,48 +351,7 @@ export default function Home() {
         </div>
       </section>
       {/* Footer */}
-      <footer className="border-t border-white/10 bg-gradient-to-t from-black via-black/80 to-transparent py-10 mt-12">
-        <div className="container flex flex-col md:flex-row items-center justify-between gap-6 px-4">
-          <div className="flex items-center gap-3">
-            <span className="text-xl font-bold text-cyan-400">MythicStone</span>
-            <span className="hidden md:inline-block text-gray-500">|</span>
-            <span className="text-sm text-gray-400">专注于魔兽世界大秘境数据服务</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link
-              href="https://github.com/thenecromance/mythic-stone"
-              className="flex items-center gap-1 text-gray-400 hover:text-cyan-400 transition-colors"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-            >
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" className="inline-block">
-                <path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.847-2.337 4.695-4.566 4.944.36.31.68.921.68 1.857 0 1.34-.012 2.421-.012 2.751 0 .267.18.578.688.48C19.138 20.2 22 16.447 22 12.021 22 6.484 17.523 2 12 2Z" />
-              </svg>
-              <span className="hidden sm:inline">GitHub</span>
-            </Link>
-            {/* 可添加更多社交链接 */}
-          </div>
-        </div>
-
-        <div className="mt-6 border-t border-white/10 pt-6 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} MythicStonePlus. Made by <Link
-            href="https://github.com/thenecromance"
-            className="text-cyan-400">Thenecromance</Link>.
-          <span className="mx-2 text-gray-700">|</span>
-          <span>数据来源：网易暴雪API</span>
-          <div className="mt-2 text-center text-xs text-gray-500">
-            <a
-              href="https://beian.miit.gov.cn/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-cyan-400 transition-colors"
-            >
-              {process.env.NEXT_PUBLIC_BEIAN_NUMBER}
-            </a>
-          </div>
-        </div>
-      </footer>
+     
     </div>
   )
 }
