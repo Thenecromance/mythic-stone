@@ -79,7 +79,7 @@ export default function SearchResultsPage() {
                 setError(null)
 
                 // Fetch player info
-                const playerResponse = await fetch(`http://localhost:8080/api/${realm}/${playerName}`)
+                const playerResponse = await fetch(`${process.env.NEXT_PUBLIC_API}/api/${realm}/${playerName}`)
                 if (!playerResponse.ok) {
                     throw new Error(`Failed to fetch player info: ${playerResponse.status}`)
                 }
@@ -87,14 +87,14 @@ export default function SearchResultsPage() {
                 setPlayerInfo(playerData)
 
                 // Fetch dungeon runs
-                const dungeonResponse = await fetch(`http://localhost:8080/api/${realm}/${playerName}/dungeons`)
+                const dungeonResponse = await fetch(`${process.env.NEXT_PUBLIC_API}/api/${realm}/${playerName}/dungeons`)
                 if (!dungeonResponse.ok) {
                     throw new Error(`Failed to fetch dungeon data: ${dungeonResponse.status}`)
                 }
                 const dungeonData = await dungeonResponse.json()
                 setDungeonRuns(dungeonData)
 
-                const periodResponse = await fetch(`http://localhost:8080/api/${realm}/${playerName}/period`)
+                const periodResponse = await fetch(`${process.env.NEXT_PUBLIC_API}/api/${realm}/${playerName}/period`)
                 if (!periodResponse.ok) {
                     throw new Error(`Failed to fetch dungeon data: ${periodResponse.status}`)
                 }
@@ -257,7 +257,7 @@ export default function SearchResultsPage() {
                             <div>
                                 <div className="flex items-center justify-between mb-6">
                                     <h2 className="text-2xl font-bold">
-                                        {viewMode === "week" ? "本周大秘境记录" : "最高大秘境记录"}
+                                        {viewMode === "week" ? "本周最佳大秘境" : "本赛季最佳大秘境"}
                                     </h2>
                                     <div className="flex gap-2">
                                         <button
@@ -301,7 +301,7 @@ export default function SearchResultsPage() {
                                             <p className="text-xl font-semibold text-orange-400">{allMaxLevel}</p>
                                         </div>
                                         <div className="bg-gray-700 rounded-lg p-4 text-center">
-                                            <p className="text-gray-400 text-base">最高评分</p>
+                                            <p className="text-gray-400 text-base">单大秘境最高评分</p>
                                             <p className="text-xl font-semibold text-purple-400">{Math.round(allMaxRating)}</p>
                                         </div>
                                     </div>
