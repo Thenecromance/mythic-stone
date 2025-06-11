@@ -42,7 +42,7 @@ export default function Component() {
 
                         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center font-extralight font-mono">
                             <Input
-                                placeholder="输入玩家名-服务器名 (例如: PlayerName-Stormrage)"
+                                placeholder="输入玩家名-服务器名"
                                 value={playerName}
                                 onChange={(e) => setPlayerName(e.target.value)}
                                 className="w-80 bg-gray-800 border-gray-700 placeholder:text-gray-400 text-center"

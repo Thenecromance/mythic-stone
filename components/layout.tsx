@@ -13,11 +13,11 @@ export default function Layout({ children }: LayoutProps) {
     <div className="relative min-h-screen flex flex-col bg-gray-950 text-white overflow-hidden">
       {/* 背景图片层 */}
       <div
-        className="fixed top-0 left-0 w-full h-screen z-0"
+        className="absolute inset-0 z-0"
         aria-hidden="true"
         style={{
           backgroundImage: "url(/bg-pattern.png)",
-          backgroundSize: "cover",
+          backgroundSize: "cover", // 修改此处
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}

@@ -43,6 +43,17 @@ interface DungeonRun {
     affixes: Affix[]
 }
 
+interface PeriodRun {
+    period: number
+    dungeon_id: number
+    finish: boolean
+    complete_time_stamp: number
+    level: number
+    duration: number
+    rating: number
+
+}
+
 export default function SearchResultsPage() {
     const searchParams = useSearchParams()
     const realm = searchParams.get("realm") || ""
@@ -50,8 +61,10 @@ export default function SearchResultsPage() {
 
     const [playerInfo, setPlayerInfo] = useState<PlayerInfo | null>(null)
     const [dungeonRuns, setDungeonRuns] = useState<DungeonRun[]>([])
+    const [periodRuns, setPeriodRuns] = useState<DungeonRun[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const [viewMode, setViewMode] = useState<"week" | "all">("week")
 
     useEffect(() => {
         const fetchPlayerData = async () => {
@@ -65,54 +78,6 @@ export default function SearchResultsPage() {
                 setLoading(true)
                 setError(null)
 
-                const mockPlayer: PlayerInfo = {
-                    "name": "黑色卷卷毛",
-                    "realm": "布兰卡德",
-                    "slug": "blanchard",
-                    "level": 80,
-                    "last_login_timestamp": 1749185930000,
-                    "average_item_level": 667,
-                    "equipped_item_level": 667,
-                    "allow": true,
-                    "class": "潜行者",
-                    "spec": "奇袭",
-                    "race": "玛格汉兽人",
-                    "rating": 2218.608,
-                    "top_rating": 3012.8582
-                }
-                const mockDungeonsRun: DungeonRun[] = [
-                    {
-                        "name": "暴富矿区！！",
-                        "finish": true,
-                        "duration": 1874491,
-                        "level": 12,
-                        "complete_time_stamp": 1748071469000,
-                        "rating": 366.9983,
-                        "affixes": [
-                            {
-                                "name": "强韧",
-                                "description": "非首领敌人的生命值提高20%，造成的伤害最多提高20%。",
-                                "asset": "https://render.worldofwarcraft.com/tw/icons/56/ability_toughness.jpg"
-                            },
-                            {
-                                "name": "残暴",
-                                "description": "首领的生命值提高25%，首领及其爪牙造成的伤害最多提高15%。",
-                                "asset": "https://render.worldofwarcraft.com/tw/icons/56/achievement_boss_archaedas.jpg"
-                            },
-                            {
-                                "name": "萨拉塔斯的狡诈",
-                                "description": "萨拉塔斯背叛了玩家，撤销了自己的交易，而且每次角色死亡都会让剩余时间减少15秒。",
-                                "asset": "https://render.worldofwarcraft.com/tw/icons/56/ability_racial_chillofnight.jpg"
-                            }
-                        ]
-                    },
-
-                ]
-
-
-                setPlayerInfo(mockPlayer)
-                setDungeonRuns(mockDungeonsRun)
-                return
                 // Fetch player info
                 const playerResponse = await fetch(`http://localhost:8080/api/${realm}/${playerName}`)
                 if (!playerResponse.ok) {
@@ -128,6 +93,13 @@ export default function SearchResultsPage() {
                 }
                 const dungeonData = await dungeonResponse.json()
                 setDungeonRuns(dungeonData)
+
+                const periodResponse = await fetch(`http://localhost:8080/api/${realm}/${playerName}/period`)
+                if (!periodResponse.ok) {
+                    throw new Error(`Failed to fetch dungeon data: ${periodResponse.status}`)
+                }
+                const periodData = await periodResponse.json()
+                setPeriodRuns(periodData)
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Failed to load player data")
             } finally {
@@ -181,6 +153,23 @@ export default function SearchResultsPage() {
         return "text-gray-400"
     }
 
+    // 计算本周一零点时间戳
+    const getWeekStart = () => {
+        const now = new Date()
+        const day = now.getDay() || 7 // 周日为0，转为7
+        now.setHours(0, 0, 0, 0)
+        now.setDate(now.getDate() - day + 1)
+        return now.getTime()
+    }
+    // const weekStart = getWeekStart()
+    const thisWeekRuns = periodRuns
+    const thisWeekCount = thisWeekRuns.length
+    const thisWeekMaxLevel = thisWeekRuns.reduce((max, run) => Math.max(max, run.level), 0)
+    // const thisWeekMaxRating = thisWeekRuns.reduce((max, run) => Math.max(max, run.rating), 0)
+
+    const allMaxLevel = dungeonRuns.reduce((max, run) => Math.max(max, run.level), 0)
+    const allMaxRating = dungeonRuns.reduce((max, run) => Math.max(max, run.rating), 0)
+
     return (
         <Layout>
             <div className="pt-20">
@@ -191,7 +180,7 @@ export default function SearchResultsPage() {
                         <div className="flex items-center justify-center py-12">
                             <div className="text-center">
                                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto mb-4"></div>
-                                <p className="text-gray-300 text-lg">Loading player data...</p>
+                                <p className="text-gray-300 text-lg">加载中...</p>
                             </div>
                         </div>
                     )}
@@ -201,7 +190,7 @@ export default function SearchResultsPage() {
                         <div className="text-center py-12">
                             <p className="text-red-400 text-lg mb-4">{error}</p>
                             <Link href="/">
-                                <Button className="bg-purple-600 hover:bg-purple-700">Back to Search</Button>
+                                <Button className="bg-purple-600 hover:bg-purple-700">返回搜索</Button>
                             </Link>
                         </div>
                     )}
@@ -229,34 +218,36 @@ export default function SearchResultsPage() {
                                             <div className="text-right">
                                                 <div className="flex items-center gap-2 mb-2">
                                                     <Trophy className="h-5 w-5 text-yellow-400" />
-                                                    <span className={`text-xl font-bold ${getRatingColor(playerInfo.rating)}`}>
-                                                        {Math.round(playerInfo.rating)}
+                                                    <span className={`text-xl font-bold ${getRatingColor(playerInfo.top_rating)}`}>
+                                                        {Math.round(playerInfo.top_rating)}
                                                     </span>
                                                 </div>
-                                                <p className="text-sm text-gray-400">最高: {Math.round(playerInfo.top_rating)}</p>
+                                                <p className="text-sm text-gray-400">最后登录时间：{formatDate(playerInfo.last_login_timestamp)} </p>
                                             </div>
                                         </div>
                                     </CardHeader>
                                     <CardContent>
                                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                             <div className="bg-gray-700 rounded-lg p-3 text-center">
-                                                <p className="text-gray-400 text-sm">平均装等</p>
-                                                <p className="text-white text-lg font-semibold">{playerInfo.average_item_level}</p>
-                                            </div>
-                                            <div className="bg-gray-700 rounded-lg p-3 text-center">
-                                                <p className="text-gray-400 text-sm">已装备装等</p>
-                                                <p className="text-white text-lg font-semibold">{playerInfo.equipped_item_level}</p>
-                                            </div>
-                                            <div className="bg-gray-700 rounded-lg p-3 text-center">
-                                                <p className="text-gray-400 text-sm">最后登录</p>
-                                                <p className="text-white text-sm">{formatDate(playerInfo.last_login_timestamp)}</p>
-                                            </div>
-                                            <div className="bg-gray-700 rounded-lg p-3 text-center">
-                                                <p className="text-gray-400 text-sm">状态</p>
-                                                <p className={`text-sm font-semibold ${playerInfo.allow ? "text-green-400" : "text-red-400"}`}>
-                                                    {playerInfo.allow ? "公开" : "私密"}
+                                                <p className="text-gray-400 text-base">当前评分</p>
+                                                <p className={`text-xl font-semibold ${getRatingColor(playerInfo.rating)}`}>
+                                                    {Math.round(playerInfo.rating)}
                                                 </p>
                                             </div>
+                                            <div className="bg-gray-700 rounded-lg p-3 text-center">
+                                                <p className={`text-gray-400 text-base`}>最高分</p>
+                                                <p className={`text-xl ${getRatingColor(playerInfo.top_rating)}`}>{Math.round(playerInfo.top_rating)}</p>
+                                            </div>
+
+                                            <div className="bg-gray-700 rounded-lg p-3 text-center">
+                                                <p className="text-gray-400 text-base">平均装等</p>
+                                                <p className="text-white text-xl font-semibold">{playerInfo.average_item_level}</p>
+                                            </div>
+                                            <div className="bg-gray-700 rounded-lg p-3 text-center">
+                                                <p className="text-gray-400 text-base">已装备装等</p>
+                                                <p className="text-white text-xl font-semibold">{playerInfo.equipped_item_level}</p>
+                                            </div>
+
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -264,9 +255,60 @@ export default function SearchResultsPage() {
 
                             {/* Dungeon Runs */}
                             <div>
-                                <h2 className="text-2xl font-bold mb-6">地下城记录</h2>
+                                <div className="flex items-center justify-between mb-6">
+                                    <h2 className="text-2xl font-bold">
+                                        {viewMode === "week" ? "本周大秘境记录" : "最高大秘境记录"}
+                                    </h2>
+                                    <div className="flex gap-2">
+                                        <button
+                                            className={`px-5 py-2 rounded-lg font-semibold transition
+                                                ${viewMode === "week"
+                                                    ? "bg-purple-600 text-white shadow border-2 border-purple-700"
+                                                    : "bg-gray-800 text-gray-300 border border-gray-600 hover:bg-gray-700"}
+                                            `}
+                                            onClick={() => setViewMode("week")}
+                                        >
+                                            本周
+                                        </button>
+                                        <button
+                                            className={`px-5 py-2 rounded-lg font-semibold transition
+                                                ${viewMode === "all"
+                                                    ? "bg-purple-600 text-white shadow border-2 border-purple-700"
+                                                    : "bg-gray-800 text-gray-300 border border-gray-600 hover:bg-gray-700"}
+                                            `}
+                                            onClick={() => setViewMode("all")}
+                                        >
+                                            最高
+                                        </button>
+                                    </div>
+                                </div>
+                                {/* 统计栏 */}
+                                {viewMode === "week" ? (
+                                    <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="bg-gray-700 rounded-lg p-4 text-center">
+                                            <p className="text-gray-400 text-base">本周完成次数</p>
+                                            <p className="text-xl font-semibold text-white">{thisWeekCount}</p>
+                                        </div>
+                                        <div className="bg-gray-700 rounded-lg p-4 text-center">
+                                            <p className="text-gray-400 text-base">本周最高层数</p>
+                                            <p className="text-xl font-semibold text-orange-400">{thisWeekMaxLevel}</p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="bg-gray-700 rounded-lg p-4 text-center">
+                                            <p className="text-gray-400 text-base">最高层数</p>
+                                            <p className="text-xl font-semibold text-orange-400">{allMaxLevel}</p>
+                                        </div>
+                                        <div className="bg-gray-700 rounded-lg p-4 text-center">
+                                            <p className="text-gray-400 text-base">最高评分</p>
+                                            <p className="text-xl font-semibold text-purple-400">{Math.round(allMaxRating)}</p>
+                                        </div>
+                                    </div>
+                                )}
 
-                                {dungeonRuns.length === 0 ? (
+                                {/* dungeonRuns 列表 */}
+                                {(viewMode === "week" ? thisWeekRuns : dungeonRuns).length === 0 ? (
                                     <Card className="bg-gray-800 border-gray-700">
                                         <CardContent className="text-center py-12">
                                             <p className="text-gray-400">暂无地下城记录</p>
@@ -274,7 +316,7 @@ export default function SearchResultsPage() {
                                     </Card>
                                 ) : (
                                     <div className="space-y-4">
-                                        {dungeonRuns.map((run, index) => (
+                                        {(viewMode === "week" ? thisWeekRuns : dungeonRuns).map((run, index) => (
                                             <Card key={index} className="bg-gray-800 border-gray-700">
                                                 <CardContent className="p-6">
                                                     <div className="flex items-center justify-between mb-4">
@@ -317,27 +359,29 @@ export default function SearchResultsPage() {
                                                     </div>
 
                                                     {/* Affixes */}
-                                                    <div>
-                                                        <h4 className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
-                                                            <Zap className="h-4 w-4" />
-                                                            词缀
-                                                        </h4>
-                                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                                            {run.affixes.map((affix, affixIndex) => (
-                                                                <div key={affixIndex} className="bg-gray-700 rounded-lg p-3">
-                                                                    <div className="flex items-center gap-3 mb-2">
-                                                                        <img
-                                                                            src={affix.asset || "/placeholder.svg"}
-                                                                            alt={affix.name}
-                                                                            className="w-8 h-8 rounded"
-                                                                        />
-                                                                        <span className="text-white font-medium">{affix.name}</span>
+                                                    {Array.isArray(run.affixes) && run.affixes.length > 0 && (
+                                                        <div>
+                                                            <h4 className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                                                                <Zap className="h-4 w-4" />
+                                                                词缀
+                                                            </h4>
+                                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                                {run.affixes.map((affix, affixIndex) => (
+                                                                    <div key={affixIndex} className="bg-gray-700 rounded-lg p-3">
+                                                                        <div className="flex items-center gap-3 mb-2">
+                                                                            <img
+                                                                                src={affix.asset || "/placeholder.svg"}
+                                                                                alt={affix.name}
+                                                                                className="w-8 h-8 rounded"
+                                                                            />
+                                                                            <span className="text-white font-medium">{affix.name}</span>
+                                                                        </div>
+                                                                        <p className="text-gray-400 text-xs">{affix.description}</p>
                                                                     </div>
-                                                                    <p className="text-gray-400 text-xs">{affix.description}</p>
-                                                                </div>
-                                                            ))}
+                                                                ))}
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    )}
                                                 </CardContent>
                                             </Card>
                                         ))}
