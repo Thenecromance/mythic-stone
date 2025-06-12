@@ -295,7 +295,7 @@ export default function LeaderboardPage() {
                                                     </div>
                                                 </td>
                                                 <td className="px-4 py-4 whitespace-nowrap">
-                                                    <Link href={`/search?realm=${player.slug}&name=${player.name}`}>
+                                                    <Link href={`/player?realm=${player.slug}&name=${player.name}`}>
                                                         <span className={`font-medium ${getClassColor(player.class)}`}>{player.name}</span>
                                                     </Link>
                                                 </td>
