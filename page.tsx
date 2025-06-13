@@ -5,6 +5,7 @@ import { ArrowRight, CheckCircle2, CreditCard, LineChart, Lock, Wallet } from "l
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import Header from "./components/header"
+import Footer from "./components/footer"
 
 export default function Home() {
   return (
@@ -351,7 +352,7 @@ export default function Home() {
         </div>
       </section>
       {/* Footer */}
-     
+      <Footer />
     </div>
   )
 }

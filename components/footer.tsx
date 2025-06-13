@@ -32,13 +32,20 @@ export default function Footer() {
                 </div>
             </div>
 
-            <div className="mt-6 border-t border-white/10 pt-6 text-center text-xs text-gray-500">
+            <div className="mt-6 border-t border-white/10 pt-6 text-center text-md text-gray-500">
+                <span className="block text-white">
+                    所有《魔兽世界》相关内容，包括但不限于游戏本身，均为暴雪娱乐和网易版权所有。
+                </span>
+                <span className="block text-white">
+                    本网站为粉丝网站，不隶属于暴雪娱乐或网之易，也不受暴雪娱乐或网之易认可。
+                </span>
+                <span className="block text-white">
+                    数据来源:<Link href="https://wow.blizzard.cn/character" className = "text-cyan-400">英雄榜</Link>
+                </span>
                 © {new Date().getFullYear()} MythicStonePlus. Made by <Link
                     href="https://github.com/thenecromance"
                     className="text-cyan-400">Thenecromance</Link>.
-                <span className="mx-2 text-gray-700">|</span>
-                <span>数据来源：网易暴雪API</span>
-                <div className="mt-2 text-center text-xs text-gray-500">
+                <div className="mt-2 text-center text-md text-gray-500">
                     <a
                         href="https://beian.miit.gov.cn/"
                         target="_blank"
