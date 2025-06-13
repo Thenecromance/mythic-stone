@@ -43,7 +43,7 @@ interface DungeonRun {
     affixes: Affix[]
 }
 
-interface PeriodRun {
+/* interface PeriodRun {
     period: number
     dungeon_id: number
     finish: boolean
@@ -53,7 +53,7 @@ interface PeriodRun {
     rating: number
 
 }
-
+ */
 export default function SearchResultsPage() {
     const searchParams = useSearchParams()
     const realm = searchParams.get("realm") || ""
@@ -86,6 +86,11 @@ export default function SearchResultsPage() {
                 const playerData = await playerResponse.json()
                 setPlayerInfo(playerData)
 
+                if (playerData.allow === false) {
+                    setError("该玩家未公开大秘境数据或该玩家不存在")
+                    setLoading(false)
+                    return 
+                }
                 // Fetch dungeon runs
                 const dungeonResponse = await fetch(`${process.env.NEXT_PUBLIC_API}/api/${realm}/${playerName}/dungeons`)
                 if (!dungeonResponse.ok) {
@@ -189,7 +194,7 @@ export default function SearchResultsPage() {
                     {error && (
                         <div className="text-center py-12">
                             <p className="text-red-400 text-lg mb-4">{error}</p>
-                            <Link href="/">
+                            <Link href="/search">
                                 <Button className="bg-purple-600 hover:bg-purple-700">返回搜索</Button>
                             </Link>
                         </div>

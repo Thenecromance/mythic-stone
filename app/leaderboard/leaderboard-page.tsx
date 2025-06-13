@@ -59,7 +59,7 @@ export default function LeaderboardPage() {
 
                 
                 // Fetch player info
-                const leaderBoardResponse = await fetch(`${process.env.NEXT_PUBLIC_API}/api/leaderboard`)
+                const leaderBoardResponse = await fetch(`${process.env.NEXT_PUBLIC_API}/api/leaderboard_v1`)
                 if (!leaderBoardResponse.ok) {
                     throw new Error(`Failed to fetch player info: ${leaderBoardResponse.status}`)
                 }
@@ -178,8 +178,8 @@ export default function LeaderboardPage() {
                 {!loading && !error && leaderboardData && (
                     <>
                         {/* Stats Cards */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <Card className="bg-gray-800 border-gray-700">
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+                         {/*    <Card className="bg-gray-800 border-gray-700">
                                 <CardContent className="p-6">
                                     <div className="flex items-center justify-between">
                                         <div>
@@ -207,7 +207,7 @@ export default function LeaderboardPage() {
                                         </div>
                                     </div>
                                 </CardContent>
-                            </Card>
+                            </Card> */}
 
                             <Card className="bg-gray-800 border-gray-700">
                                 <CardContent className="p-6">
@@ -229,18 +229,18 @@ export default function LeaderboardPage() {
                         {/* Percentiles */}
                         <Card className="bg-gray-800 border-gray-700 mb-8">
                             <CardHeader>
-                                <CardTitle className="text-xl">评分百分位</CardTitle>
+                                <CardTitle className="text-xl text-white">评分百分位</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                                     {leaderboardData.percentiles.map((percentile, index) => (
                                         <div key={index} className="bg-gray-700 rounded-lg p-4 text-center relative overflow-hidden">
                                             <div
-                                                className={`absolute inset-0 bg-gradient-to-r ${percentile.color} opacity-20`}
+                                                className={`absolute inset-0 bg-gradient-to-r opacity-20`}
                                                 style={{ height: "100%" }}
                                             ></div>
                                             <p className="text-white font-bold text-lg relative z-10">{percentile.percentile}</p>
-                                            <p className="text-yellow-400 text-2xl font-bold relative z-10">{percentile.rating.toFixed(0)}</p>
+                                            <p className={` ${percentile.color} text-2xl font-bold relative z-10`}>{percentile.rating.toFixed(0)}</p>
                                             <p className="text-gray-400 text-sm relative z-10">评分</p>
                                         </div>
                                     ))}
