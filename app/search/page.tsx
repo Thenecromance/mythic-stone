@@ -37,7 +37,11 @@ export default function Component() {
                     </div>
                 ) : (
                     <div className="text-center max-w-2xl">
-                        <h1 className="text-4xl font-bold mb-6">{"mythicstone.plus"}</h1>
+                        <h1
+                            className="text-5xl font-extrabold mb-6 bg-gradient-to-r from-purple-400 via-white-400 to-blue-400 bg-clip-text text-transparent drop-shadow-lg rounded-xl py-2 px-4 inline-block"
+                        >
+                            {"mythicstone.plus"}
+                        </h1>
                         <p className="text-gray-400 text-lg mb-8">{"输入'玩家-服务器'即可查询玩家大秘境记录"}</p>
 
                         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center font-extralight font-mono">

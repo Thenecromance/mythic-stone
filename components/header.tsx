@@ -1,13 +1,29 @@
 "use client"
 
 import Link from "next/link"
+import { use, useEffect } from "react"
+import { toast, Toaster } from "sonner"
 
 export default function Header() {
+    useEffect(() => {
+        toast("欢迎来到 MythicStone.plus", {
+            description: "所有《魔兽世界》相关内容版权归暴雪娱乐和网易所有，本网站为第三方制作，与暴雪娱乐及网之易无关。",
+            duration: 3000,
+            position: "top-center",
+            style: {
+                opacity:0.8,
+                backgroundColor: "#1a1a1a",
+                color: "#fff",
+                borderRadius: "8px",
+                padding: "16px",
+                fontSize: "16px",
+            },
+        })
+    },[]
+    )
     return (
         <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-black/60 shadow-lg backdrop-blur-2xl transition-all" >
-            {/* 若横幅高度有变化，调整 top 值 */}
             <div className="container flex h-16 items-center justify-between px-4">
-
                 <Link className="flex items-center space-x-2 font-bold group" href="/">
                     <img
                         src="/logo.png"
@@ -33,11 +49,19 @@ export default function Header() {
                         排行榜
                     </Link>
                     <Link
-                        href="/search"
-                        /*     target="_blank"
-                            rel="noopener noreferrer" */
-                        className="ml-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold shadow hover:from-cyan-400 hover:to-violet-400 transition-all"
+                        href="/about"
+                        className="px-4 py-2 rounded-lg text-gray-300 hover:text-violet-400 hover:bg-violet-900/20 transition-all font-medium"
                     >
+                        说明
+                    </Link>
+                    <Link
+                        href="/search"
+                        className="ml-2 px-5 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold shadow-lg hover:from-cyan-400 hover:to-violet-400 transition-all duration-200 flex items-center gap-2 transform hover:scale-105 hover:shadow-xl"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white drop-shadow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" fill="none"/>
+                            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
                         搜索
                     </Link>
                 </nav>
@@ -45,9 +69,8 @@ export default function Header() {
                     {/* 可添加移动端菜单按钮 */}
                 </div>
             </div>
-            <div className="w-full text-center text-md text-red-500 bg-black/60 py-1 shadow-lg backdrop-blur-2xl transition-all">
-                所有《魔兽世界》相关内容版权归暴雪娱乐和网易所有，本网站为第三方制作，与暴雪娱乐及网之易无关。
-            </div>
+            <Toaster/>
         </header>
+        
     )
 }
