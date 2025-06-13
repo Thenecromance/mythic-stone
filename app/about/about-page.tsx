@@ -18,7 +18,7 @@ export default function AboutPage() {
                     <section className="space-y-14">
                         <div>
                             <h2 className="text-2xl font-bold mb-4 text-blue-300 tracking-wide text-center">
-                                团队与开发
+                                开发
                             </h2>
                             <TeamInfo />
                         </div>
